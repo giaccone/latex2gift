@@ -50,7 +50,8 @@ else:
                     '\bar':'\\\\bar',
                     '\mu':'\\\\mu',
                     '\cos':'\\\\cos',
-                    '\varphi':'\\\\varphi'}
+                    '\varphi':'\\\\varphi',
+                    '\sqrt':'\\\\sqrt'}
 
     # math environment LaTeX to html
     def replace_dollars(question_string, flag):
