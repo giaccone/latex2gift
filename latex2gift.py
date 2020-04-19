@@ -1,6 +1,7 @@
 # import libraries
 import sys
 
+print("\033[93m", end='')
 # check sys.argv
 if (sys.argv[1]).lower() == '--help':
     print("\n\nYou must call the script in this way\n")
@@ -18,8 +19,14 @@ elif len(sys.argv) > 6:
     sys.exit()
 else:
     # get path of the image
-    print("Please enter the path of the folder with you images (on Moodle Server):\n")
+    print("\nPlease enter the path of the folder with your images (on Moodle Server):")
+    print("\033[0m", end='')
+    print("        * leave it empty (i.e. press return) to use the variable \033[93m'http://dummy_path/'\033[0m so that'")
+    print("          you can find/replace it later.")
+    
     img_path = input()
+    if img_path == '':
+        img_path = 'http://dummy_path/'
 
     # decode sys.argv
     course = sys.argv[1]
@@ -33,6 +40,9 @@ else:
     answer = ""
     Qtype = ""
     n = 0
+    n_multi = 0
+    n_true_false = 0
+    n_numerical = 0
 
     # max LaTeX commands
     latex_command = {'\Omega':'\\\\Omega',
@@ -54,7 +64,9 @@ else:
             return replace_dollars(question_string, flag=0)
 
     # start reading LaTeX file
+    print("\033[93m", end='')
     print("\n-------------------------------------------")
+    print("\033[0m", end='')
     with open(fname, 'r') as file:
         for line in file:
             # get category
@@ -101,6 +113,7 @@ else:
                     gift += question + "{\n" + answer + "}\n\n\n"
 
                     n += 1
+                    n_multi += 1
                     print(" * {}) Question: {} - Type {}".format(n, name, Qtype))
 
                     question = ""
@@ -119,6 +132,7 @@ else:
                     gift += question + "{" + answer + "}\n\n\n"
 
                     n += 1
+                    n_true_false += 1
                     print(" * {}) Question: {} - Type {}".format(n, name, Qtype))
 
                     question = ""
@@ -138,6 +152,7 @@ else:
                     gift += question + "{#\n" + answer + "}\n\n\n"
                     
                     n += 1
+                    n_numerical += 1
                     print(" * {}) Question: {} - Type {}".format(n, name, Qtype))
 
                     question = ""
@@ -157,8 +172,15 @@ else:
         file.write(gift)
     
     # print summary
+    print("\033[93m", end='')
     print("\n-------------------------------------------")
-    print("{} questions written in {}".format(n, fout))
+    print("\033[0m", end='')
+    print("\033[1mTotal\033[0m questions written:  {}".format(n, fout))
+    print("  * \033[1mmultiple choice\033[0m:  {}".format(n_multi, fout))
+    print("  * \033[1mtrue-false\033[0m:       {}".format(n_true_false, fout))
+    print("  * \033[1mnumerical\033[0m:        {}".format(n_numerical, fout))
+    print("\033[93m", end='')
     print("-------------------------------------------\n\n")
+    print("\033[0m", end='')
 
 
