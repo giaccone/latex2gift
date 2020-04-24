@@ -3,4 +3,6 @@
 *.synctex.gz
 example.pdf
 *.txt
+.vscode/
+__pycache__/
 
