@@ -1,10 +1,5 @@
 \documentclass{article}
 
-% necessary for accent (linux)
-\usepackage[italian]{babel}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-
 \usepackage{graphicx}
 
 % to set a divider
@@ -14,95 +9,77 @@
 \newcounter{QuestionNumber}
 \newcommand{\question}{\stepcounter{QuestionNumber} {\bf Question: \arabic{QuestionNumber}}}
 
-% path for images
-\graphicspath{{./img/}}
-
 
 \begin{document}
-%---------------------------------------------------------------------
-CAT; example
+	
 
-\question
+\section{Quiz: latex-calculated}
 
-NAME; square
+\subsection{square}
+Calcolare l'area del quadrato rappresentato in figura usando il valore del diametro $d$.
 
-TYPE; multi
+\includegraphics[width=0.3\columnwidth]{./img/square}
 
-Q; What is the area of the square?
-
-\includegraphics[width=0.3\columnwidth]{square}
-
-DATA; $d=4\sqrt{2}\mathrm{m}$
-\begin{itemize}
-	\item A+100; $16\mathrm{m}$
-	\item A-25; $8\mathrm{m}$
-	\item A-25; $4\mathrm{m}$
-	\item A-25; $32\mathrm{m}$
-\end{itemize}
-
-END;
-
-%---------------------------------------------------------------------
-
-\divider
-
-%---------------------------------------------------------------------
-
-CAT; example
-
-\question
-
-NAME; triangle
-
-TYPE; true-false
-
-Q; The figure represents a scalene triangle.
-
-\includegraphics[width=0.3\columnwidth]{triangle}
-
+Dati: d = \{d\} m
 
 \begin{itemize}
-	\item A; false
+	\item answer: \texttt{pow((\{d\} / sqrt(2)),2)}
+	\item fraction: 100
+	\item tolerance: 0.08
+	\item tolerancetype: relative % relative/nominal/geometric
+	\item correctanswerformat: decimal % decimal/significant figures
+	\item correctanswerlength: 2
 \end{itemize}
 
-END;
+\begin{description}
+	\item[param:] d
+	\begin{description}
+		\item[database] private  % private/shared
+		\item[minimum] 1
+		\item[maximum] 10
+		\item[decimals] 2
+		\item[value] 2
+		\item[distribution] uniform   % uniform/loguniform
+	\end{description}
+\end{description}
 
-%---------------------------------------------------------------------
 
-\divider
+\subsection{triangle}
+Calcolare l'ipotenusa $c$.
 
-%---------------------------------------------------------------------
-\newpage
+\includegraphics[width=0.3\columnwidth]{./img/triangle}
 
-CAT; example
+Dati: a = \{a\} m, b = \{b\} m
 
-\question
-
-NAME; circle
-
-TYPE; numerical
-
-Q; Given the circle in figure. Compute the area in $cm^2$
-
-\includegraphics[width=0.3\columnwidth]{circle}
-
-DATA; $d=2\mathrm{m}$
-
-% Here half of the total points are given if the result
-% is correct but expressed in m^2
 \begin{itemize}
-	\item A+100; 1973.920:0.5
-	\item A+50; 19.739:0.05
+	\item answer: \texttt{sqrt(pow(\{a\},2) + pow(\{b\},2))}
+	\item fraction: 100
+	\item tolerance: 0.1
+	\item tolerancetype: relative % relative/nominal/geometric
+	\item correctanswerformat: decimal % decimal/significant figures
+	\item correctanswerlength: 2
 \end{itemize}
 
-END;
-
-%---------------------------------------------------------------------
-
-\divider
-
-%---------------------------------------------------------------------
-
+\begin{description}
+	\item[param:] a
+	\begin{description}
+		\item[database] private  % private/shared
+		\item[minimum] 1
+		\item[maximum] 5
+		\item[decimals] 0
+		\item[value] 3
+		\item[distribution] uniform   % uniform/loguniform
+	\end{description}
+	\item[param:] b
+	\begin{description}
+		\item[database] private  % private/shared
+		\item[minimum] 6
+		\item[maximum] 10
+		\item[decimals] 0
+		\item[value] 8
+		\item[distribution] uniform   % uniform/loguniform
+    \end{description}
+\end{description}
 
 
 \end{document}
