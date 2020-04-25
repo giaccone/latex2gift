@@ -176,6 +176,17 @@ with open(fout, 'a') as file:
     file.write("</quiz>\n")
 
 
+# print summary
+print("\n\nQuiz: \033[93m{}\033[0m imported with the following Calculated questions:".format(category))
+print("      " + "\033[93m-\033[0m" * len(category))
+print("\n")
+for k, quest in enumerate(questions):
+    if k < 10:
+        num = " " + str(k)
+    else:
+        num = str(k)
+    print("    * question {}: \033[93m{}\033[0m ({} parameters)".format(num, quest.name, len(quest.parameters)))
+print("\n\n")
 
 
 
