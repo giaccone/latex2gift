@@ -9,6 +9,7 @@ Small script to perform conversion from LaTeX to xml moodle format
 
 Example:
 ```bash
+# python 3+ is required
 python latex2xml.py example.tex
 ```
 
