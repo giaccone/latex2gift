@@ -158,16 +158,22 @@ with open(fname, 'r') as file:
             if '\item[database]' in line:
                 param_prop_temp.append(line.split("]")[1].split("%")[0].strip())
             elif '\item[minimum]' in line:
-                param_prop_temp.append(int(line.split("]")[1]))
+                param_prop_temp.append(int(line.split("]")[1].split("%")[0].strip()))
             elif '\item[maximum]' in line:
-                param_prop_temp.append(int(line.split("]")[1]))
+                param_prop_temp.append(int(line.split("]")[1].split("%")[0].strip()))
             elif '\item[decimals]' in line:
-                param_prop_temp.append(int(line.split("]")[1]))
+                param_prop_temp.append(int(line.split("]")[1].split("%")[0].strip()))
             elif '\item[distribution]' in line:
-                param_prop_temp.append(line.split("]")[1].split("%")[0].strip())
+                current_item = line.split("]")[1].split("%")[0].strip()
+                # unpack list (if any)
+                if "(" in current_item:
+                    current_item = current_item.replace("(", '')
+                    current_item = current_item.replace(")", '')
+                    current_item = [float(str(k)) for k in current_item.split(",")]
+                
+                param_prop_temp.append(current_item)
                 param_prop.append(param_prop_temp)
                 param_prop_temp = []
-
 
 
 # write xml

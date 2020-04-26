@@ -154,7 +154,13 @@ def write_dataset(fout, question):
         content += """    <name><text>{}</text>\n""".format(param.name)
         content += """    </name>\n"""
         content += """    <type>calculated</type>\n"""
-        content += """    <distribution><text>{}</text>\n""".format(param.distribution)
+        # The following line is no more used because only uniform distrib is supported.
+        # When list is selected insted of uniform, the following is still set to
+        # uniform because it is unused.
+
+        # content += """    <distribution><text>{}</text>\n""".format(param.distribution)
+        content += """    <distribution><text>uniform</text>\n"""
+
         content += """    </distribution>\n"""
         content += """    <minimum><text>{}</text>\n""".format(param.minimum)
         content += """    </minimum>\n"""
@@ -163,21 +169,37 @@ def write_dataset(fout, question):
         content += """    <decimals><text>{}</text>\n""".format(param.decimals)
         content += """    </decimals>\n"""
 
-        content += """    <itemcount>{}</itemcount>\n""".format(question.dimension)
+        if isinstance(question.dimension, int):
+            content += """    <itemcount>{}</itemcount>\n""".format(question.dimension)
+        elif question.dimension.lower() == 'list':
+            content += """    <itemcount>{}</itemcount>\n""".format(len(param.distribution))
+            
         content += """      <dataset_items>\n"""
-        for n in range(question.dimension):
-            content += """        <dataset_item>\n"""
-            content += """        <number>{}</number>\n""".format(n + 1)
-            if param.decimals == 0:
-                value = random.randint(param.minimum, param.maximum)
-            else:
-                value = random.uniform(param.minimum, param.maximum)
-                value = round(value, param.decimals)
-            content += """          <value>{}</value>\n""".format(value)
-            content += """        </dataset_item>\n"""
+        
+        if isinstance(question.dimension, int):
+            for n in range(question.dimension):
+                content += """        <dataset_item>\n"""
+                content += """        <number>{}</number>\n""".format(n + 1)
+                if param.decimals == 0:
+                    value = random.randint(param.minimum, param.maximum)
+                else:
+                    value = random.uniform(param.minimum, param.maximum)
+                    value = round(value, param.decimals)
+                content += """          <value>{}</value>\n""".format(value)
+                content += """        </dataset_item>\n"""
+        elif question.dimension.lower() == 'list':
+            for n, value in enumerate(param.distribution):
+                content += """        <dataset_item>\n"""
+                content += """        <number>{}</number>\n""".format(n + 1)
+                content += """          <value>{}</value>\n""".format(value)
+                content += """        </dataset_item>\n"""
+
             
         content += """      </dataset_items>\n"""
-        content += """    <number_of_items>{}</number_of_items>\n""".format(question.dimension)
+        if isinstance(question.dimension, int):
+            content += """    <number_of_items>{}</number_of_items>\n""".format(question.dimension)
+        elif question.dimension.lower() == 'list':
+            content += """    <number_of_items>{}</number_of_items>\n""".format(len(param.distribution))
         
         content += """    </dataset_definition>\n"""
     

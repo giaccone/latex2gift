@@ -36,9 +36,9 @@ Dati: d = \{d\} m
 	\item[param:] d
 	\begin{description}
 		\item[database] private  % private/shared
-		\item[minimum] 1
-		\item[maximum] 10
-		\item[decimals] 2
+		\item[minimum] 1          % in the case of 'list' it's unused
+		\item[maximum] 10          % in the case of 'list' it's unused
+		\item[decimals] 2          % in the case of 'list' it's unused
 		\item[distribution] uniform   % uniform or list
 	\end{description}
 \end{description}
@@ -58,25 +58,25 @@ Dati: a = \{a\} m, b = \{b\} m
 	\item tolerancetype: relative % relative/nominal/geometric
 	\item correctanswerformat: decimal % decimal/significant figures
 	\item correctanswerlength: 2
-	\item dimension: 3
+	\item dimension:  list
 \end{itemize}
 
 \begin{description}
 	\item[param:] a
 	\begin{description}
 		\item[database] private  % private/shared
-		\item[minimum] 1
-		\item[maximum] 5
-		\item[decimals] 0
-		\item[distribution] uniform   % uniform or list
+		\item[minimum] 1     % in the case of 'list' it's unused
+		\item[maximum] 5           % in the case of 'list' it's unused
+		\item[decimals] 0          % in the case of 'list' it's unused
+		\item[distribution] (1, 3, 5, 7)   % uniform or list
 	\end{description}
 	\item[param:] b
 	\begin{description}
 		\item[database] private  % private/shared
-		\item[minimum] 6
-		\item[maximum] 10
-		\item[decimals] 0
-		\item[distribution] uniform   % uniform or list
+		\item[minimum] 6          % in the case of 'list' it's unused
+		\item[maximum] 10          % in the case of 'list' it's unused
+		\item[decimals] 0          % in the case of 'list' it's unused
+		\item[distribution] (2, 4, 6, 8)   % uniform or list
     \end{description}
 \end{description}
 
