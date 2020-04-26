@@ -20,10 +20,10 @@ def replace_dollars(question_string, flag):
     if "$" not in question_string:
         return question_string
     elif flag == 0:
-        question_string = question_string.replace("$","\\\\(", 1)
+        question_string = question_string.replace("$","\\(", 1)
         return replace_dollars(question_string, flag=1)
     elif flag == 1:
-        question_string = question_string.replace("$","\\\\)", 1)
+        question_string = question_string.replace("$","\\)", 1)
         return replace_dollars(question_string, flag=0)
 
 # initialization
@@ -36,6 +36,7 @@ tolerance = ""
 tolerancetype = ""
 correctanswerformat = ""
 correctanswerlength = ""
+dimension = ""
 get_question_text = False
 get_answer = False
 
@@ -78,6 +79,11 @@ with open(fname, 'r') as file:
                 correctanswerformat = (element.split("%"))[0].strip()
             elif '\\item correctanswerlength:' in line:
                 correctanswerlength = int(element)
+            elif '\\item dimension:' in line:
+                if 'list' in element.lower():
+                    dimension = element.strip()
+                else:
+                    dimension = int(element)
                 get_answer = False
         
         # enable/disable get parameters
@@ -108,6 +114,7 @@ with open(fname, 'r') as file:
                                tolerancetype,
                                correctanswerformat,
                                correctanswerlength,
+                               dimension,
                                [DataSet(n,*p) for n, p in zip(param_name, param_prop)])
                 
                 questions.append(Q)
@@ -121,6 +128,7 @@ with open(fname, 'r') as file:
                 tolerancetype = ""
                 correctanswerformat = ""
                 correctanswerlength = ""
+                dimension = ""
                 get_question_text = False
                 get_answer = False
 
@@ -154,8 +162,6 @@ with open(fname, 'r') as file:
             elif '\item[maximum]' in line:
                 param_prop_temp.append(int(line.split("]")[1]))
             elif '\item[decimals]' in line:
-                param_prop_temp.append(int(line.split("]")[1]))
-            elif '\item[value]' in line:
                 param_prop_temp.append(int(line.split("]")[1]))
             elif '\item[distribution]' in line:
                 param_prop_temp.append(line.split("]")[1].split("%")[0].strip())

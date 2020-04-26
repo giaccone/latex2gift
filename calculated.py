@@ -1,8 +1,9 @@
 import base64
+import random
 
 class Calculated:
     
-    def __init__(self, name, text, answer, fraction, tolerance, tolerancetype, correctanswerformat, correctanswerlength, parameters):
+    def __init__(self, name, text, answer, fraction, tolerance, tolerancetype, correctanswerformat, correctanswerlength, dimension, parameters):
         self.name = name
         self.text = text
         self.answer = answer
@@ -11,6 +12,7 @@ class Calculated:
         self.tolerancetype = tolerancetype
         self.correctanswerformat = correctanswerformat
         self.correctanswerlength = correctanswerlength
+        self.dimension = dimension
         self.parameters = parameters
     
     def __str__(self):
@@ -22,13 +24,13 @@ class Calculated:
         string_format += "tolerancetype = {}\n".format(self.tolerancetype)
         string_format += "correctanswerformat = {}\n".format(self.correctanswerformat)
         string_format += "correctanswerlength = {}\n".format(self.correctanswerlength)
+        string_format += "dimension = {}\n".format(self.dimension)
         for k, ele in enumerate(self.parameters):
             string_format += "  * param1 = {}\n".format(ele.name)
             string_format += "     . database = {}\n".format(ele.database)
             string_format += "     . minimum = {}\n".format(ele.minimum)
             string_format += "     . maximum = {}\n".format(ele.maximum)
             string_format += "     . decimals = {}\n".format(ele.decimals)
-            string_format += "     . value = {}\n".format(ele.value)
             string_format += "     . distribution = {}\n".format(ele.distribution)
 
         return string_format
@@ -36,13 +38,12 @@ class Calculated:
 
 class DataSet:
 
-    def __init__(self, name, database, minimum, maximum, decimals, value, distribution):
+    def __init__(self, name, database, minimum, maximum, decimals, distribution):
         self.name = name
         self.database = database
         self.minimum = minimum
         self.maximum = maximum
         self.decimals = decimals
-        self.value = value
         self.distribution = distribution
 
 
@@ -161,14 +162,23 @@ def write_dataset(fout, question):
         content += """    </maximum>\n"""
         content += """    <decimals><text>{}</text>\n""".format(param.decimals)
         content += """    </decimals>\n"""
-        content += """    <itemcount>1</itemcount>\n"""
-        content += """    <dataset_items>\n"""
-        content += """    <dataset_item>\n"""
-        content += """    <number>1</number>\n"""
-        content += """    <value>{}</value>\n""".format(param.value)
-        content += """    </dataset_item>\n"""
-        content += """    </dataset_items>\n"""
-        content += """    <number_of_items>1</number_of_items>\n"""
+
+        content += """    <itemcount>{}</itemcount>\n""".format(question.dimension)
+        content += """      <dataset_items>\n"""
+        for n in range(question.dimension):
+            content += """        <dataset_item>\n"""
+            content += """        <number>{}</number>\n""".format(n + 1)
+            if param.decimals == 0:
+                value = random.randint(param.minimum, param.maximum)
+            else:
+                value = random.uniform(param.minimum, param.maximum)
+                value = round(value, param.decimals)
+            content += """          <value>{}</value>\n""".format(value)
+            content += """        </dataset_item>\n"""
+            
+        content += """      </dataset_items>\n"""
+        content += """    <number_of_items>{}</number_of_items>\n""".format(question.dimension)
+        
         content += """    </dataset_definition>\n"""
     
     content += """    </dataset_definitions>\n"""
