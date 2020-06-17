@@ -7,13 +7,13 @@ fname = sys.argv[1]
 fout = fname.replace('.tex','.xml')
 
 # max LaTeX commands
-latex_command = {'\Omega':'\\\\Omega',
-                '\mathrm':'\\\\mathrm',
-                '\bar':'\\\\bar',
-                '\mu':'\\\\mu',
-                '\cos':'\\\\cos',
-                '\varphi':'\\\\varphi',
-                '\sqrt':'\\\\sqrt'}
+latex_command = {'\Omega':'\\Omega',
+                '\mathrm':'\\mathrm',
+                '\bar':'\\bar',
+                '\mu':'\\mu',
+                '\cos':'\\cos',
+                '\varphi':'\\varphi',
+                '\sqrt':'\\sqrt'}
 
 # math environment LaTeX to html
 def replace_dollars(question_string, flag):
@@ -52,128 +52,132 @@ questions = []
 # read file
 with open(fname, 'r') as file:
     for line in file:
-        # get question text
-        if get_question_text is True:
-            if "\\begin{itemize}" in line:
-                get_question_text = False
-                get_answer = True
+        if len(line.strip()) > 0:
+            if line.strip()[0] == '%':
+                pass
             else:
-                text += line
-        
-        # get answer
-        elif get_answer is True:
-            element = (line.split(":")[1]).strip()
-            if '\\item answer:' in line:
-                answer = (element.replace("\\texttt{","").strip())[:-1]
-                # replace LaTeX notation for curly brackets
-                answer = answer.replace("\}","}").replace("\{","{")
+                # get question text
+                if get_question_text is True:
+                    if "\\begin{itemize}" in line:
+                        get_question_text = False
+                        get_answer = True
+                    else:
+                        text += line
                 
-            
-            elif '\\item fraction:' in line:
-                fraction = int(element)
-            elif '\\item tolerance:' in line:
-                tolerance = float(element)
-            elif '\\item tolerancetype:' in line:
-                tolerancetype = (element.split("%"))[0].strip()
-            elif '\\item correctanswerformat:' in line:
-                correctanswerformat = (element.split("%"))[0].strip()
-            elif '\\item correctanswerlength:' in line:
-                correctanswerlength = int(element)
-            elif '\\item dimension:' in line:
-                if 'list' in element.lower():
-                    dimension = element.strip()
-                else:
-                    dimension = int(element)
-                get_answer = False
-        
-        # enable/disable get parameters
-        elif '\\begin{description}' in line:
-            if get_param_name is False:
-                get_param_name = True
-            else:
-                get_param_prop = True
-        
-        elif '\end{description}' in line:
-            if get_param_prop is True:
-                get_param_prop = False
-            else:
-                get_param_name = False
-
-                # make LaTeX to html conversion for text
-                text = replace_dollars(text, flag=0)
-                text = text.replace("\}","}").replace("\{","{")
-                for key in latex_command:
-                    text = text.replace(key, latex_command[key])
-
-                # summarize question
-                Q = Calculated(name,
-                               text,
-                               answer,
-                               fraction,
-                               tolerance,
-                               tolerancetype,
-                               correctanswerformat,
-                               correctanswerlength,
-                               dimension,
-                               [DataSet(n,*p) for n, p in zip(param_name, param_prop)])
+                # get answer
+                elif get_answer is True:
+                    element = (line.split(":")[1]).strip()
+                    if '\\item answer:' in line:
+                        answer = (element.replace("\\texttt{","").strip())[:-1]
+                        # replace LaTeX notation for curly brackets
+                        answer = answer.replace("\}","}").replace("\{","{")
+                        
+                    
+                    elif '\\item fraction:' in line:
+                        fraction = int(element)
+                    elif '\\item tolerance:' in line:
+                        tolerance = float(element)
+                    elif '\\item tolerancetype:' in line:
+                        tolerancetype = (element.split("%"))[0].strip()
+                    elif '\\item correctanswerformat:' in line:
+                        correctanswerformat = (element.split("%"))[0].strip()
+                    elif '\\item correctanswerlength:' in line:
+                        correctanswerlength = int(element)
+                    elif '\\item dimension:' in line:
+                        if 'list' in element.lower():
+                            dimension = element.strip()
+                        else:
+                            dimension = int(element)
+                        get_answer = False
                 
-                questions.append(Q)
+                # enable/disable get parameters
+                elif '\\begin{description}' in line:
+                    if get_param_name is False:
+                        get_param_name = True
+                    else:
+                        get_param_prop = True
                 
-                # reset variables
-                name = ""
-                text = ""
-                answer = ""
-                fraction = ""
-                tolerance = ""
-                tolerancetype = ""
-                correctanswerformat = ""
-                correctanswerlength = ""
-                dimension = ""
-                get_question_text = False
-                get_answer = False
+                elif '\end{description}' in line:
+                    if get_param_prop is True:
+                        get_param_prop = False
+                    else:
+                        get_param_name = False
 
-                param_name = []
-                param_prop = []
-                param_prop_temp = []
-                get_param_name = False
-                get_param_prop = False
+                        # make LaTeX to html conversion for text
+                        text = replace_dollars(text, flag=0)
+                        text = text.replace("\}","}").replace("\{","{")
+                        for key in latex_command:
+                            text = text.replace(key, latex_command[key])
+
+                        # summarize question
+                        Q = Calculated(name,
+                                       text,
+                                       answer,
+                                       fraction,
+                                       tolerance,
+                                       tolerancetype,
+                                       correctanswerformat,
+                                       correctanswerlength,
+                                       dimension,
+                                       [DataSet(n,*p) for n, p in zip(param_name, param_prop)])
+                        
+                        questions.append(Q)
+                        
+                        # reset variables
+                        name = ""
+                        text = ""
+                        answer = ""
+                        fraction = ""
+                        tolerance = ""
+                        tolerancetype = ""
+                        correctanswerformat = ""
+                        correctanswerlength = ""
+                        dimension = ""
+                        get_question_text = False
+                        get_answer = False
+
+                        param_name = []
+                        param_prop = []
+                        param_prop_temp = []
+                        get_param_name = False
+                        get_param_prop = False
 
 
+                        
+
+                # get category
+                elif "\section" in line:
+                    category = ((line.split(":")[1]).replace("}","")).strip()
+                # get question name
+                elif "\subsection" in line:
+                    name = ((line.split("{")[1]).replace("}","")).strip()
+                    get_question_text = True
                 
-
-        # get category
-        elif "\section" in line:
-            category = ((line.split(":")[1]).replace("}","")).strip()
-        # get question name
-        elif "\subsection" in line:
-            name = ((line.split("{")[1]).replace("}","")).strip()
-            get_question_text = True
-        
-        # get parameter name
-        if get_param_name is True:
-            if '\item[param:]' in line:
-                param_name.append(line.split("]")[1].strip())
-        # get parameter properties
-        if get_param_prop is True:
-            if '\item[database]' in line:
-                param_prop_temp.append(line.split("]")[1].split("%")[0].strip())
-            elif '\item[minimum]' in line:
-                param_prop_temp.append(int(line.split("]")[1].split("%")[0].strip()))
-            elif '\item[maximum]' in line:
-                param_prop_temp.append(int(line.split("]")[1].split("%")[0].strip()))
-            elif '\item[decimals]' in line:
-                param_prop_temp.append(int(line.split("]")[1].split("%")[0].strip()))
-            elif '\item[distribution]' in line:
-                current_item = line.split("]")[1].split("%")[0].strip()
-                # unpack list (if any)
-                if "(" in current_item:
-                    current_item = current_item.replace("(", '')
-                    current_item = current_item.replace(")", '')
-                    current_item = [float(str(k)) for k in current_item.split(",")]
-                
-                param_prop_temp.append(current_item)
-                param_prop.append(param_prop_temp)
-                param_prop_temp = []
+                # get parameter name
+                if get_param_name is True:
+                    if '\item[param:]' in line:
+                        param_name.append(line.split("]")[1].strip())
+                # get parameter properties
+                if get_param_prop is True:
+                    if '\item[database]' in line:
+                        param_prop_temp.append(line.split("]")[1].split("%")[0].strip())
+                    elif '\item[minimum]' in line:
+                        param_prop_temp.append(int(line.split("]")[1].split("%")[0].strip()))
+                    elif '\item[maximum]' in line:
+                        param_prop_temp.append(int(line.split("]")[1].split("%")[0].strip()))
+                    elif '\item[decimals]' in line:
+                        param_prop_temp.append(int(line.split("]")[1].split("%")[0].strip()))
+                    elif '\item[distribution]' in line:
+                        current_item = line.split("]")[1].split("%")[0].strip()
+                        # unpack list (if any)
+                        if "(" in current_item:
+                            current_item = current_item.replace("(", '')
+                            current_item = current_item.replace(")", '')
+                            current_item = [float(str(k)) for k in current_item.split(",")]
+                        
+                        param_prop_temp.append(current_item)
+                        param_prop.append(param_prop_temp)
+                        param_prop_temp = []
 
 
 # write xml
