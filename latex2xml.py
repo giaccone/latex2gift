@@ -31,6 +31,7 @@ category = ""
 name = ""
 text = ""
 answer = ""
+defaultgrade = ""
 fraction = ""
 tolerance = ""
 tolerancetype = ""
@@ -73,6 +74,8 @@ with open(fname, 'r') as file:
                         answer = answer.replace(r"\}",r"}").replace(r"\{",r"{")
                         
                     
+                    elif r'\item defaultgrade' in line:
+                        defaultgrade = float(element)
                     elif r'\item fraction:' in line:
                         fraction = int(element)
                     elif r'\item tolerance:' in line:
@@ -113,6 +116,7 @@ with open(fname, 'r') as file:
                         Q = Calculated(name,
                                        text,
                                        answer,
+                                       defaultgrade,
                                        fraction,
                                        tolerance,
                                        tolerancetype,
@@ -127,6 +131,7 @@ with open(fname, 'r') as file:
                         name = ""
                         text = ""
                         answer = ""
+                        defaultgrade = ""
                         fraction = ""
                         tolerance = ""
                         tolerancetype = ""

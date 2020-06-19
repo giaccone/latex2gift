@@ -3,10 +3,11 @@ import random
 
 class Calculated:
     
-    def __init__(self, name, text, answer, fraction, tolerance, tolerancetype, correctanswerformat, correctanswerlength, dimension, parameters):
+    def __init__(self, name, text, answer, defaultgrade, fraction, tolerance, tolerancetype, correctanswerformat, correctanswerlength, dimension, parameters):
         self.name = name
         self.text = text
         self.answer = answer
+        self.defaultgrade = defaultgrade
         self.fraction = fraction
         self.tolerance = tolerance
         self.tolerancetype = tolerancetype
@@ -19,6 +20,7 @@ class Calculated:
         string_format = "name = {}\n".format(self.name)
         string_format += "text = {}\n".format(self.text[:20] + " ...")
         string_format += "answer = {}\n".format(self.answer)
+        string_format += "defaultgrade = {}\n".format(self.defaultgrade)
         string_format += "tolerance = {}\n".format(self.tolerance)
         string_format += "fraction = {}\n".format(self.fraction)
         string_format += "tolerancetype = {}\n".format(self.tolerancetype)
@@ -77,7 +79,7 @@ def write_question(fout, question):
     content += """        <text><![CDATA["""
     for ele in question.text.split('\n'):
         if ele != '':
-            if '\includegraphics' in ele:
+            if r'\includegraphics' in ele:
                 img = ele.split("{")[1].replace("}","").strip()
                 if not img.lower().endswith('.png'):
                     img += '.png'
@@ -97,7 +99,7 @@ def write_question(fout, question):
     content +="""    <generalfeedback format="html">\n"""
     content +="""      <text></text>\n"""
     content +="""    </generalfeedback>\n"""
-    content +="""    <defaultgrade>1.0000000</defaultgrade>\n"""
+    content +="""    <defaultgrade>{}</defaultgrade>\n""".format(question.defaultgrade)
     content +="""    <penalty>0.3333333</penalty>\n"""
     content +="""    <hidden>0</hidden>\n"""
     content +="""    <synchronize>0</synchronize>\n"""
