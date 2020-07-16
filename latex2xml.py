@@ -167,9 +167,17 @@ with open(fname, 'r') as file:
                     if r'\item[database]' in line:
                         param_prop_temp.append(line.split("]")[1].split("%")[0].strip())
                     elif r'\item[minimum]' in line:
-                        param_prop_temp.append(int(line.split("]")[1].split("%")[0].strip()))
+                        current_value = float(line.split("]")[1].split("%")[0].strip())
+                        if abs(current_value - int(current_value)) == 0:
+                            param_prop_temp.append(int(current_value))
+                        else:
+                            param_prop_temp.append(current_value)
                     elif r'\item[maximum]' in line:
-                        param_prop_temp.append(int(line.split("]")[1].split("%")[0].strip()))
+                        current_value = float(line.split("]")[1].split("%")[0].strip())
+                        if abs(current_value - int(current_value)) == 0:
+                            param_prop_temp.append(int(current_value))
+                        else:
+                            param_prop_temp.append(current_value)
                     elif r'\item[decimals]' in line:
                         param_prop_temp.append(int(line.split("]")[1].split("%")[0].strip()))
                     elif r'\item[distribution]' in line:
