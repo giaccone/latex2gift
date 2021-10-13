@@ -13,8 +13,17 @@ latex_command = {r'\Omega':r'\Omega',
                 r'\mu':r'\mu',
                 r'\cos':r'\cos',
                 r'\varphi':r'\varphi',
-                r'\sqrt':r'\sqrt'}
-
+                r'\sqrt':r'\sqrt',
+                r'\%':r'%',
+                r'\bs{':r'<b>',
+                r'}\be':r'</b>',
+                r'à':r"&agrave;",                
+                r'è':r"&egrave;",
+                r'é':r"&eacute;",
+                r'ì':r"&igrave;",
+                r'ò':r"&ograve;",
+                r'ù':r"&ugrave;"}
+                
 # math environment LaTeX to html
 def replace_dollars(question_string, flag):
     if "$" not in question_string:
